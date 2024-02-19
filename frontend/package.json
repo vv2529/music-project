@@ -1,5 +1,5 @@
 {
-	"name": "rxjs-frontend",
+	"name": "music-frontend",
 	"private": true,
 	"scripts": {
 		"dev": "pnpm i && react-scripts start",
