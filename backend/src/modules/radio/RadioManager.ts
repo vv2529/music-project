@@ -39,7 +39,7 @@ class RadioManager {
     elapsed = round(elapsed, 2);
     current[0] = { ...current[0], elapsed };
     if (needFullRefresh || needPartialRefresh) this.provider.updateState(state).subscribe();
-    console.log("State:", state);
+    // console.log("State:", state);
     return rx.of(current);
   }
 
