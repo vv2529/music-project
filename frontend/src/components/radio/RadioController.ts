@@ -1,6 +1,6 @@
 import * as rx from "rxjs";
 import RadioAPI from "./RadioAPI";
-import { Song } from "./types";
+import { Song, SongOfTheDay } from "./types";
 
 class RadioController {
   private readonly SONG_INTERVAL = 4;
@@ -11,9 +11,9 @@ class RadioController {
     return this.updateSongStream();
   }
 
-  updateSongStream(counter = 0): rx.Observable<[Song, Song]> {
+  private updateSongStream(counter = 0): rx.Observable<[Song, Song]> {
     return new rx.Observable((sub) => {
-      if (counter >= 5) return undefined;
+      if (counter >= 1) return;
       this.api
         .getCurrentSongs()
         .pipe(
@@ -35,6 +35,10 @@ class RadioController {
         )
         .subscribe(sub);
     });
+  }
+
+  getSongOfTheDay(): rx.Observable<SongOfTheDay> {
+    return this.api.getSongOfTheDay();
   }
 }
 

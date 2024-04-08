@@ -1,5 +1,5 @@
 import * as rx from "rxjs";
-import { InternalState, Song, State } from "./types.js";
+import { DateKey, InternalState, Song, State } from "./types.js";
 
 const songs: Song[] = [
   {
@@ -81,6 +81,7 @@ class RadioProvider {
     startTime: 0,
     playlist: [],
   };
+  private songOfTheDayHistory = new Map<string, number>([["2024-02-22", 1]]);
 
   getAllSongs(): rx.Observable<Song[]> {
     return rx.of(songs);
@@ -93,6 +94,21 @@ class RadioProvider {
   updateState(state: State): rx.Observable<void> {
     this.state = { ...state, playlist: state.playlist.map(({ id }) => id) };
     return rx.of();
+  }
+
+  getSongOfTheDay(date: DateKey): rx.Observable<number | undefined> {
+    console.log("get:", this.songOfTheDayHistory);
+    return rx.of(this.songOfTheDayHistory.get(this.makeDateString(date)));
+  }
+
+  setSongOfTheDay(date: DateKey, songId: number): rx.Observable<void> {
+    this.songOfTheDayHistory.set(this.makeDateString(date), songId);
+    console.log("set:", this.songOfTheDayHistory);
+    return rx.of();
+  }
+
+  private makeDateString(date: DateKey): string {
+    return date.map((n) => ("" + n).padStart(2, "0")).join("-");
   }
 }
 

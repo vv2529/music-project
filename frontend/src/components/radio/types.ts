@@ -6,3 +6,8 @@ export type Song = {
   startTime?: number;
   elapsed?: number;
 };
+
+export type SongOfTheDay = {
+  id: number;
+  name: string;
+};

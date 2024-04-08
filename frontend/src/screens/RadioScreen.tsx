@@ -7,16 +7,17 @@ const RadioScreen = (): ReactElement => {
   const radio = useMemo(() => new RadioController(), []);
   const songs$ = useObservable(() => radio.getSongStream());
   const songs = useObservableState(songs$) ?? [];
-  console.log("Songs:", ...songs);
+  // console.log("Songs:", ...songs);
+
+  const songOfTheDay$ = useObservable(() => radio.getSongOfTheDay());
+  const songOfTheDay = useObservableState(songOfTheDay$);
 
   return (
     <Container>
       <Heading>Radio</Heading>
-      <SongRow>Playing: {songs?.[0]?.name ?? "—"}</SongRow>
-      <SongRow>Next: {songs?.[1]?.name ?? "—"}</SongRow>
-      {/* <SongRow>
-        Song of the day: <i>To be implemented...</i>
-      </SongRow> */}
+      <SongRow>Playing: {songs[0]?.name ?? "—"}</SongRow>
+      <SongRow>Next: {songs[1]?.name ?? "—"}</SongRow>
+      <SongRow $highlighted={songs[0]?.id === songOfTheDay?.id}>Song of the day: {songOfTheDay?.name ?? "—"}</SongRow>
     </Container>
   );
 };
@@ -28,7 +29,8 @@ const Container = styled("div")`
   text-align: center;
 `;
 const Heading = styled("h1")``;
-const SongRow = styled("div")`
+const SongRow = styled("div")<{ $highlighted?: boolean }>`
   margin: 0.5em 40%;
   /* text-align: left; */
+  ${({ $highlighted }) => ($highlighted ? "color: #0c0;" : "")}
 `;
