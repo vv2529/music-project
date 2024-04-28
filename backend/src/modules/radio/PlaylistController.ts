@@ -3,7 +3,7 @@ import { InternalState, Song, State } from "./types.js";
 import { getCurrentTimestampInSeconds, random, round, shuffleArray } from "../../utils.js";
 import RadioProvider from "./RadioProvider.js";
 
-class PlaylistManager {
+class PlaylistController {
   private readonly SONG_INTERVAL = 4;
   private readonly MAX_PLAYLIST_LENGTH = 100;
   private readonly REMAINDER_CAP = 50;
@@ -94,4 +94,4 @@ class PlaylistManager {
   }
 }
 
-export default PlaylistManager;
+export default PlaylistController;

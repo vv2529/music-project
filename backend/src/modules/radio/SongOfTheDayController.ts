@@ -3,14 +3,14 @@ import { Song, SongOfTheDay } from "./types.js";
 import { random } from "../../utils.js";
 import RadioProvider from "./RadioProvider.js";
 
-class SongOfTheDayManager {
+class SongOfTheDayController {
   constructor(private readonly provider: RadioProvider) {}
 
   getSongOfTheDay(): rx.Observable<SongOfTheDay> {
     return rx.forkJoin([this.provider.getAllSongs()]).pipe(
       rx.mergeMap(([songs]) => {
         const date = new Date();
-        const [y, m, d] = [date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()];
+        const [y, m, d] = [date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()];
         const songId$ = this.provider.getSongOfTheDay([y, m, d]);
         return songId$.pipe(
           rx.mergeMap((id) => {
@@ -31,4 +31,4 @@ class SongOfTheDayManager {
   }
 }
 
-export default SongOfTheDayManager;
+export default SongOfTheDayController;

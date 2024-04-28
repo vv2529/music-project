@@ -1,9 +1,9 @@
 import express from "express";
-import RadioManager from "./RadioManager.js";
+import RadioController from "./RadioController.js";
 import RadioProvider from "./RadioProvider.js";
 
 const router = express.Router();
-const radio = new RadioManager(new RadioProvider());
+const radio = new RadioController(new RadioProvider());
 
 router.get("/current", (req, res) => {
   radio.getCurrentSongs().subscribe({
