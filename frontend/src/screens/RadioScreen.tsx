@@ -1,9 +1,14 @@
 import { styled } from "goober";
-import { ReactElement, useMemo } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { useObservable, useObservableState } from "observable-hooks";
 import RadioController from "../components/radio/RadioController";
+import Select from "../components/common/Select";
+import RangeInput from "../components/common/RangeInput";
 
 const RadioScreen = (): ReactElement => {
+  const [volume, setVolume] = useState(100);
+  const [station, setStation] = useState("");
+
   const radio = useMemo(() => new RadioController(), []);
   const songs$ = useObservable(() => radio.getSongStream());
   const songs = useObservableState(songs$) ?? [];
@@ -13,24 +18,90 @@ const RadioScreen = (): ReactElement => {
   const songOfTheDay = useObservableState(songOfTheDay$);
 
   return (
-    <Container>
-      <Heading>Radio</Heading>
-      <SongRow>Playing: {songs[0]?.name ?? "—"}</SongRow>
-      <SongRow>Next: {songs[1]?.name ?? "—"}</SongRow>
-      <SongRow $highlighted={songs[0]?.id === songOfTheDay?.id}>Song of the day: {songOfTheDay?.name ?? "—"}</SongRow>
-    </Container>
+    <Screen>
+      <Container>
+        <Section>
+          <Heading>Radio</Heading>
+        </Section>
+        <Section $main>
+          <Select value={station} onChange={(e) => setStation(e.currentTarget.value)}>
+            <option value="">--- Select station ---</option>
+            <option value="central">Central</option>
+            <option value="second">Second</option>
+          </Select>
+          <SongRow>
+            <RowName>Playing:</RowName>
+            <RowValue>{songs[0]?.name ?? "—"}</RowValue>
+          </SongRow>
+          <SongRow>
+            <RowName>Next:</RowName>
+            <RowValue>{songs[1]?.name ?? "—"}</RowValue>
+          </SongRow>
+          <SongRow>
+            <RowName>Song of the day:</RowName>
+            <RowValue $highlighted={songs[0]?.id === songOfTheDay?.id}>{songOfTheDay?.name ?? "—"}</RowValue>
+          </SongRow>
+        </Section>
+        <Section>
+          <div>Volume: {Math.floor(volume)}%</div>
+          <RangeInput min="0" max="100" step="1" value={volume} onChange={(e) => setVolume(+e.currentTarget.value)} />
+        </Section>
+      </Container>
+    </Screen>
   );
 };
 
 export default RadioScreen;
 
+const Screen = styled("div")`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100vw;
+  height: 100vh;
+
+  @media (min-width: 769px) {
+    align-items: center;
+  }
+`;
 const Container = styled("div")`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 35em;
+  max-height: 100%;
+  overflow-y: auto;
+
+  & select {
+    margin-bottom: 1.5em;
+  }
+
+  @media (min-width: 769px) {
+    width: 769px;
+    border: 1px solid #fff;
+    border-radius: 1em;
+  }
+`;
+const Section = styled("div")<{ $main?: boolean }>`
+  ${({ $main }) => ($main ? "flex-grow: 1;" : "")}
+  flex-shrink: 0;
+  padding: 1.5em 3em;
+  &:not(:last-child) {
+    border-bottom: 1px solid #fff;
+  }
+`;
+const Heading = styled("h1")`
+  margin: 0;
   text-align: center;
 `;
-const Heading = styled("h1")``;
-const SongRow = styled("div")<{ $highlighted?: boolean }>`
-  margin: 0.5em 40%;
-  /* text-align: left; */
+const SongRow = styled("div")`
+  margin: 1em 0;
+`;
+const RowName = styled("span")`
+  display: inline-block;
+  width: 8.25em;
+`;
+const RowValue = styled("span")<{ $highlighted?: boolean }>`
+  display: inline-block;
   ${({ $highlighted }) => ($highlighted ? "color: #0c0;" : "")}
 `;
