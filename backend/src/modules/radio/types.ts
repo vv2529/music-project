@@ -23,3 +23,8 @@ export type SongOfTheDay = {
 };
 
 export type DateKey = [number, number, number];
+
+export type Station = {
+  name: string;
+  songs: number[];
+};

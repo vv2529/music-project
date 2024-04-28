@@ -1,7 +1,9 @@
 import { styled } from "goober";
 import { ReactElement, useMemo, useState } from "react";
 import { useObservable, useObservableState } from "observable-hooks";
+import * as rx from "rxjs";
 import RadioController from "../components/radio/RadioController";
+import stations from "../components/radio/stations";
 import Select from "../components/common/Select";
 import RangeInput from "../components/common/RangeInput";
 
@@ -10,9 +12,12 @@ const RadioScreen = (): ReactElement => {
   const [station, setStation] = useState("");
 
   const radio = useMemo(() => new RadioController(), []);
-  const songs$ = useObservable(() => radio.getSongStream());
+  const songs$ = useObservable(
+    (inputs$) => inputs$.pipe(rx.mergeMap(([station]) => radio.getSongStream(station))),
+    [station]
+  );
   const songs = useObservableState(songs$) ?? [];
-  // console.log("Songs:", ...songs);
+  // console.log("Log:", ...songs);
 
   const songOfTheDay$ = useObservable(() => radio.getSongOfTheDay());
   const songOfTheDay = useObservableState(songOfTheDay$);
@@ -26,8 +31,11 @@ const RadioScreen = (): ReactElement => {
         <Section $main>
           <Select value={station} onChange={(e) => setStation(e.currentTarget.value)}>
             <option value="">--- Select station ---</option>
-            <option value="central">Central</option>
-            <option value="second">Second</option>
+            {stations.map(({ id, name }) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))}
           </Select>
           <SongRow>
             <RowName>Playing:</RowName>

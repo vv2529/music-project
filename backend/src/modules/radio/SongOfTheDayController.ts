@@ -7,7 +7,7 @@ class SongOfTheDayController {
   constructor(private readonly provider: RadioProvider) {}
 
   getSongOfTheDay(): rx.Observable<SongOfTheDay> {
-    return rx.forkJoin([this.provider.getAllSongs()]).pipe(
+    return rx.forkJoin([this.provider.getAllSongs("central")]).pipe(
       rx.mergeMap(([songs]) => {
         const date = new Date();
         const [y, m, d] = [date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()];

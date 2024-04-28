@@ -6,16 +6,18 @@ class RadioController {
   private readonly SONG_INTERVAL = 4;
   private readonly FETCH_NEXT_DELAY = 1;
   private api = new RadioAPI();
+  private subscription?: rx.Subscription;
 
-  getSongStream(): rx.Observable<[Song, Song]> {
-    return this.updateSongStream();
+  getSongStream(station: string): rx.Observable<[Song, Song] | []> {
+    this.subscription?.unsubscribe();
+    return station ? this.updateSongStream(station) : rx.of([]);
   }
 
-  private updateSongStream(counter = 0): rx.Observable<[Song, Song]> {
+  private updateSongStream(station: string, counter = 0): rx.Observable<[Song, Song]> {
     return new rx.Observable((sub) => {
-      if (counter >= 1) return;
-      this.api
-        .getCurrentSongs()
+      if (counter >= 3) return;
+      this.subscription = this.api
+        .getCurrentSongs(station)
         .pipe(
           rx.concatMap((songs) => {
             if (counter === 0) sub.next(songs.slice(0, 2) as [Song, Song]);
@@ -28,7 +30,7 @@ class RadioController {
                 sub.next(songs.slice(1, 3) as [Song, Song]);
                 return rx
                   .timer(this.FETCH_NEXT_DELAY * 1000)
-                  .pipe(rx.concatMap(() => this.updateSongStream(++counter)));
+                  .pipe(rx.concatMap(() => this.updateSongStream(station, ++counter)));
               })
             );
           })

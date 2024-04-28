@@ -10,8 +10,8 @@ class RadioController {
 
   constructor(private readonly provider: RadioProvider) {}
 
-  getCurrentSongs(): rx.Observable<[Song, Song, Song]> {
-    return this.playlistController.getCurrentSongs();
+  getCurrentSongs(station: string): rx.Observable<[Song, Song, Song] | []> {
+    return this.playlistController.getCurrentSongs(station);
   }
 
   getSongOfTheDay(): rx.Observable<SongOfTheDay> {

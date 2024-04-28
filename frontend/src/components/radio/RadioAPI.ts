@@ -5,8 +5,8 @@ import { Song, SongOfTheDay } from "./types";
 class RadioAPI {
   private httpClient = axios.create({ baseURL: `${process.env.REACT_APP_BACKEND_URL}/api/radio` });
 
-  getCurrentSongs(): rx.Observable<[Song, Song, Song]> {
-    return rx.from(this.httpClient.get<[Song, Song, Song]>("/current").then(({ data }) => data));
+  getCurrentSongs(station: string): rx.Observable<[Song, Song, Song]> {
+    return rx.from(this.httpClient.get<[Song, Song, Song]>(`/current?station=${station}`).then(({ data }) => data));
   }
 
   getSongOfTheDay(): rx.Observable<SongOfTheDay> {

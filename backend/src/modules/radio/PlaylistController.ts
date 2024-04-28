@@ -10,10 +10,14 @@ class PlaylistController {
 
   constructor(private readonly provider: RadioProvider) {}
 
-  getCurrentSongs(): rx.Observable<[Song, Song, Song]> {
-    return rx
-      .forkJoin([this.provider.getAllSongs(), this.provider.getState()])
-      .pipe(rx.mergeMap(([songs, istate]) => this.getUpToDateState(songs, this.populateState(songs, istate))));
+  getCurrentSongs(station: string): rx.Observable<[Song, Song, Song] | []> {
+    return this.provider.doesStationExist(station)
+      ? rx
+          .forkJoin([this.provider.getAllSongs(station), this.provider.getState(station)])
+          .pipe(
+            rx.mergeMap(([songs, istate]) => this.getUpToDateState(songs, this.populateState(songs, istate), station))
+          )
+      : rx.of([]);
   }
 
   private populateState(songs: Song[], istate: InternalState): State {
@@ -21,7 +25,7 @@ class PlaylistController {
     return { ...istate, playlist: istate.playlist.map((id) => songMap[id]) };
   }
 
-  private getUpToDateState(songs: Song[], state: State): rx.Observable<[Song, Song, Song]> {
+  private getUpToDateState(songs: Song[], state: State, station: string): rx.Observable<[Song, Song, Song]> {
     let { index: oldIndex, elapsed, startTime } = this.calculateCurrentIndex(state);
     const updateIndex = this.calculateUpdateIndex(songs.length, state.playlist.length);
     const needFullRefresh = oldIndex === -1;
@@ -38,8 +42,8 @@ class PlaylistController {
     const current = state.playlist.slice(index, index + 3) as [Song, Song, Song];
     elapsed = round(elapsed, 2);
     current[0] = { ...current[0], elapsed };
-    if (needFullRefresh || needPartialRefresh) this.provider.updateState(state).subscribe();
-    // console.log("State:", state);
+    if (needFullRefresh || needPartialRefresh) this.provider.updateState(state, station).subscribe();
+    // console.log("State:", station, state);
     return rx.of(current);
   }
 

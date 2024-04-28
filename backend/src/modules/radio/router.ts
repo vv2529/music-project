@@ -6,7 +6,8 @@ const router = express.Router();
 const radio = new RadioController(new RadioProvider());
 
 router.get("/current", (req, res) => {
-  radio.getCurrentSongs().subscribe({
+  const station = req.query.station as string;
+  radio.getCurrentSongs(station).subscribe({
     next: (v) => {
       console.log("Current:", v);
       res.json(v);

@@ -11,3 +11,8 @@ export type SongOfTheDay = {
   id: number;
   name: string;
 };
+
+export type Station = {
+  id: string;
+  name: string;
+};
