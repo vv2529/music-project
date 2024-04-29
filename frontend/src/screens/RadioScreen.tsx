@@ -29,7 +29,7 @@ const RadioScreen = (): ReactElement => {
           <Heading>Radio</Heading>
         </Section>
         <Section $main>
-          <Select value={station} onChange={(e) => setStation(e.currentTarget.value)}>
+          <Select aria-label="Select station" value={station} onChange={(e) => setStation(e.currentTarget.value)}>
             <option value="">--- Select station ---</option>
             {stations.map(({ id, name }) => (
               <option key={id} value={id}>
@@ -52,7 +52,14 @@ const RadioScreen = (): ReactElement => {
         </Section>
         <Section>
           <div>Volume: {Math.floor(volume)}%</div>
-          <RangeInput min="0" max="100" step="1" value={volume} onChange={(e) => setVolume(+e.currentTarget.value)} />
+          <RangeInput
+            aria-label="Volume"
+            min="0"
+            max="100"
+            step="1"
+            value={volume}
+            onChange={(e) => setVolume(+e.currentTarget.value)}
+          />
         </Section>
       </Container>
     </Screen>
