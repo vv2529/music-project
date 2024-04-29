@@ -6,6 +6,7 @@ import RadioController from "../components/radio/RadioController";
 import stations from "../components/radio/stations";
 import Select from "../components/common/Select";
 import RangeInput from "../components/common/RangeInput";
+import { BackNavigation } from "../components/common/navigation";
 
 const RadioScreen = (): ReactElement => {
   const [volume, setVolume] = useState(100);
@@ -24,6 +25,7 @@ const RadioScreen = (): ReactElement => {
 
   return (
     <Screen>
+      <BackNavigation to="/" />
       <Container>
         <Section>
           <Heading>Radio</Heading>

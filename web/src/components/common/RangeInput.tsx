@@ -29,9 +29,11 @@ const sliderThumb = `
   cursor: pointer;
 `;
 const sliderThumbFocus = `
+  background: hsl(240, 0%, 10%);
   box-shadow: 0px 0px 5px #666;
 `;
 const sliderThumbActive = `
+  background: hsl(240, 0%, 15%);
   box-shadow: 0px 0px 5px #888;
 `;
 const RangeInputStyled = styled("input")`
@@ -40,10 +42,6 @@ const RangeInputStyled = styled("input")`
   height: 3em;
   padding: 0;
   background: none;
-
-  &:focus {
-    outline: none;
-  }
 
   &::-webkit-slider-runnable-track {
     ${sliderTrack}

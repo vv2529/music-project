@@ -24,7 +24,6 @@ const SelectStyled = styled("select")`
     color: #888;
   }
   &:focus {
-    outline: none;
     background: linear-gradient(hsla(240, 0%, 5%, 0.75), hsla(240, 0%, 5%, 0.75)), $primary-color;
   }
 
