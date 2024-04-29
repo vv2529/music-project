@@ -47,7 +47,9 @@ const RadioScreen = (): ReactElement => {
           </SongRow>
           <SongRow>
             <RowName>Song of the day:</RowName>
-            <RowValue $highlighted={songs[0]?.id === songOfTheDay?.id}>{songOfTheDay?.name ?? "—"}</RowValue>
+            <RowValue $highlighted={!!songs[0]?.id && songs[0]?.id === songOfTheDay?.id}>
+              {songOfTheDay?.name ?? "—"}
+            </RowValue>
           </SongRow>
         </Section>
         <Section>
