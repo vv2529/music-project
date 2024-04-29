@@ -25,7 +25,7 @@ const RadioScreen = (): ReactElement => {
 
   return (
     <Screen>
-      <BackNavigation to="/" />
+      <BackNavigation aria-label="Return to home" to="/" />
       <Container>
         <Section>
           <Heading>Radio</Heading>
