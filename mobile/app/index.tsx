@@ -1,5 +1,4 @@
 import { Link } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { ReactElement } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -10,7 +9,6 @@ const Home = (): ReactElement => {
       <Link href="/radio" style={[styles.text, styles.link]}>
         Radio
       </Link>
-      <StatusBar style="auto" />
     </View>
   );
 };
